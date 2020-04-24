@@ -1,3 +1,1 @@
-from tkCharacter.tkCharacter import TkCharacter
-
-
+from tkCharacter.tkCharacter.tkCharacter import TkCharacter

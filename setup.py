@@ -5,10 +5,11 @@ setup(
   version = '0.1',
   license='MIT',
   description = 'Allows for effortless creation of playable and AI 2d characters in python games',
+  long_description= "",
   author = 'Don Charles - Lambert',
   author_email = 'your.email@domain.com',
   url = 'https://github.com/DonCharlesLambert/tkCharacter',
-  download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/DonCharlesLambert/tkCharacter/archive/0.1.tar.gz',    # I explain this later on
   keywords = ['tkinter', 'games', 'characters'],
   install_requires=[            # I get to this in a second
           'tkinter',

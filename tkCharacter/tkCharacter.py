@@ -1,13 +1,15 @@
 from tkinter import PhotoImage
+import time
 
 
 class TkCharacter:
-    # added variables
-    DOWN_ANIMATION = ["0", "1", "2"]
-    LEFT_ANIMATION = ["3", "4", "5"]
-    RIGHT_ANIMATION = ["6", "7", "8"]
-    UP_ANIMATION = ["9", "10", "11"]
-    STANCE_ANIMATION = ["0", "13", "14"]
+    animation_list = {
+        "up"    : ["9", "10", "11"],
+        "down"  : ["0", "1", "2"],
+        "right" : ["6", "7", "8"],
+        "left"  : ["3", "4", "5"],
+        "stance": ["0"]
+    }
     animation_number = 0
 
     def __init__(self, canvas, x, y, directory, **kwargs):
@@ -16,20 +18,17 @@ class TkCharacter:
         self.canvas = canvas
         self.image_dir = directory
         self.speed = 10
+        self.interval = time.time()
+        self.direction = "stance"
 
-        print(kwargs)
-        if "left" in kwargs.keys():
-            self.LEFT_ANIMATION = kwargs["left"]
-        if "right" in kwargs.keys():
-            self.RIGHT_ANIMATION = kwargs["right"]
-        if "down" in kwargs.keys():
-            self.DOWN_ANIMATION = kwargs["down"]
-        if "up" in kwargs.keys():
-            self.UP_ANIMATION = kwargs["up"]
-        if "speed" in kwargs.keys():
-            self.speed = kwargs["speed"]
+        for key in kwargs.keys():
+            if key == "speed":
+                self.speed = kwargs[key]
+            else:
+                self.animation_list[key] = kwargs[key]
 
     def move(self, direction):
+        self.direction = direction
         if direction == "left":
             self.canvas.move(self.canvas_sprite, -self.speed, 0)
         elif direction == "right":
@@ -38,24 +37,16 @@ class TkCharacter:
             self.canvas.move(self.canvas_sprite, 0, -self.speed)
         elif direction == "down":
             self.canvas.move(self.canvas_sprite, 0, self.speed)
-        self.animate(direction)
+
+        if time.time() - self.interval > 0.1:
+            self.interval = time.time()
+            self.animate()
 
     def pos(self):
         return self.canvas.coords(self.canvas_sprite)
 
-    # added function
-    def animate(self, direction):
-        current_animation = self.STANCE_ANIMATION
-        if direction == "up":
-            current_animation = self.UP_ANIMATION
-        elif direction == "down":
-            current_animation = self.DOWN_ANIMATION
-        elif direction == "left":
-            current_animation = self.LEFT_ANIMATION
-        elif direction == "right":
-            current_animation = self.RIGHT_ANIMATION
-
+    def animate(self):
+        current_animation = self.animation_list[self.direction]
         self.sprite = PhotoImage(file=self.image_dir + r'\\' + current_animation[self.animation_number] + ".png")
         self.animation_number = (self.animation_number + 1) % len(current_animation)
-
         self.canvas.itemconfig(self.canvas_sprite, image=self.sprite)
